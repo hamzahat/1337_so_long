@@ -1,8 +1,11 @@
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
+#include <mlx.h>
+#include <X11/X.h>
+#include <X11/keysym.h>
+
 # include <fcntl.h>
-# include <mlx.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
@@ -17,6 +20,14 @@
 
 # define WIDTH 800
 # define HEIGHT 600
+
+
+//? Define key codes for Linux
+# define KEY_ESC        65307
+# define KEY_W          119
+# define KEY_A          97
+# define KEY_S          115
+# define KEY_D          100
 
 //? ft_safe_malloc struct:
 typedef struct s_mem_node

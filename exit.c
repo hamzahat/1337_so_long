@@ -17,7 +17,7 @@ int	close_window(void *mlx, void *win)
 {
 	(void)mlx;
 	(void)win;
-	printf("mlx %s win %s\n", mlx, win);
+	printf("mlx %p win %p\n", mlx, win);
 	// mlx_destroy_window(mlx, win);
 	// ft_safe_malloc(0,0,1);
 	exit(-1);
