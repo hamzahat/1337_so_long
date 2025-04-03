@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hamza_hat <hamza_hat@student.42.fr>        +#+  +:+       +#+        */
+/*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 18:39:35 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/03/31 12:32:03 by hamza_hat        ###   ########.fr       */
+/*   Updated: 2025/04/03 22:14:08 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,24 +69,72 @@ char *ft_strcpy(char *dst, const char *src)
 }
 //todo: fix this shit
 
-// static void	flood_fill_recur(char **tab, t_point size, int x , int y, char target)
-// {
-// 	if (x < 0 || x >= size.x || y < 0 || y >= size.y)
-// 		return;
-// 	if (tab[y][x] != target)
-// 		return;
-// 	tab[y][x] = 'F';
-// 	flood_fill_recur(tab, size, x + 1, y, target);
-// 	flood_fill_recur(tab, size, x - 1, y, target);
-// 	flood_fill_recur(tab, size, x, y + 1, target);
-// 	flood_fill_recur(tab, size, x, y - 1, target);
-// }
+static void	flood_fill_recur(char **tab, t_map size, int x , int y, char target)
+{
+	if (x < 0 || x >= size.width || y < 0 || y >= size.height)
+		return;
+	if (tab[y][x] != target)
+		return;
+	tab[y][x] = 'F';
+	flood_fill_recur(tab, size, x + 1, y, target);
+	flood_fill_recur(tab, size, x - 1, y, target);
+	flood_fill_recur(tab, size, x, y + 1, target);
+	flood_fill_recur(tab, size, x, y - 1, target);
+}
 
-// void	flood_fill(char *tab[], t_point size, t_point begin)
-// {
-// 	char target = tab[begin.x][begin.y];
+void	flood_fill(char *tab[], t_map size, t_game begin)
+{
+	char target = tab[begin.player_x][begin.player_y];
 
-// 	if (target == 'F') //* if it's already 'F' , no need to fill
-// 		return;
-// 	flood_fill_recur(tab, size, begin.x, begin.y, target);
-// }
+	if (target == '0') //* if it's already 'F' , no need to fill
+		return;
+	flood_fill_recur(tab, size, begin.player_x, begin.player_y, target);
+}
+
+char	**copy_map(char *zone[], t_map size)
+{
+	int		x;
+	int		y;
+	char	**arr;
+
+	x = 0;
+	y = 0;
+	arr = ft_safe_malloc(sizeof(char *) * (size.height + 1), ALLOCATE, 1, NULL);
+	while (y < size.height)
+	{
+		x = 0;
+		arr[y] = ft_safe_malloc(sizeof(char) * (size.width + 1), ALLOCATE, 1, NULL);
+		while (x < size.width)
+		{
+			arr[y][x] = zone[y][x];
+			x++;
+		}
+		arr[y][x] = 0;
+		y++;
+	}
+	arr[y] = NULL;
+	return (arr);
+}
+
+void	find_player(char **map, t_map size, t_game count)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < size.height)
+	{
+		while (j < size.width)
+		{
+			if (map[i][j] == 'P')
+			{
+				count.player_x = j;
+				count.player_y = i;
+				return ;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+

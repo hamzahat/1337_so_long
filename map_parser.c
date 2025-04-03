@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hamza_hat <hamza_hat@student.42.fr>        +#+  +:+       +#+        */
+/*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 17:47:15 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/03/31 16:40:14 by hamza_hat        ###   ########.fr       */
+/*   Updated: 2025/04/03 22:05:46 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,14 +78,14 @@ static void	calculate_size(t_map *size, int fd)
 		close(fd);
 		exit(1);
 	}
-	size->x = ft_strlen_map_check(tmp);
+	size->width = ft_strlen_map_check(tmp);
 	free(tmp);
 	while ((tmp = get_next_line(fd)))
 	{
 		i++;
 		free(tmp);
 	}
-	size->y = i;
+	size->height = i;
 }
 
 //? copy the map from file (.ber) to 2D array
@@ -95,10 +95,10 @@ static char	**make_area(int fd, t_map *size)
     char    *line;
     int     i = 0;
 
-    map = ft_safe_malloc(sizeof(char *) * (size->y + 1), 1, 1);
+    map = ft_safe_malloc(sizeof(char *) * (size->height + 1), ALLOCATE, 1, NULL);
     while ((line = get_next_line(fd)))
     {
-        map[i] = ft_safe_malloc(sizeof(char) * (ft_strlen_map_check(line) + 1), 1, 1);
+        map[i] = ft_safe_malloc(sizeof(char) * (ft_strlen_map_check(line) + 1), ALLOCATE, 1,NULL);
         ft_strcpy(map[i], line);
         free(line);
         i++;
@@ -111,22 +111,22 @@ static char	**make_area(int fd, t_map *size)
 static void check_map_closed(char **map, t_map *size)
 {
 	int i = 0;
-	while (i < size->x)
+	while (i < size->width)
 	{
-		if ((map[0][i] != '1') || (map[size->y - 1][i] != '1'))
+		if ((map[0][i] != '1') || (map[size->height - 1][i] != '1'))
 		{
 			ft_putstr_fd("Error: Map is not enclosed in walls.\n", 2);
-			ft_safe_malloc(0,0,1);
+			ft_safe_malloc(0, 0, ALLOCATE, NULL);
 		}
 		i++;
 	}
 	i = 0;
-	while (i < size->y)
+	while (i < size->height)
 	{
-		if ((map[i][0] != '1') || (map[i][size->x - 1] != '1'))
+		if ((map[i][0] != '1') || (map[i][size->width - 1] != '1'))
 		{
 			ft_putstr_fd("Error: Map is not enclosed in walls.\n", 2);
-			ft_safe_malloc(0,0,1);
+			ft_safe_malloc(0, 0, ALLOCATE, NULL);
 		}
 		i++;
 	}
@@ -160,8 +160,38 @@ static void	check_valid_chars(char **map, t_game *count)
 	if ((count->exit != 1) || (count->player != 1) || (count->coins < 1) || (invalid_char == 1))
 	{
 		ft_putstr_fd("Error: Map must have exactly 1 exit, 1 player, at least 1 coins\n", 2);
-		ft_safe_malloc(0,0,1);
+		ft_safe_malloc(0, 0, ALLOCATE, NULL);
 	}
+}
+
+//? //? Validate path
+void	validate_path(char **map, t_map size, t_game count)
+{
+	char	**map_cp;
+	int		i;
+	int		j;
+
+	map_cp = copy_map(map, size);
+	find_player(map_cp, size, count);
+	flood_fill(map_cp, count);
+	i = 0;
+	while (i < size.height)
+	{
+		j = 0;
+		while (j < size.width)
+		{
+			if (map_cp[i][j] == 'C' || map_cp[i][j] == 'E')
+			{
+				ft_putstr_fd("Error: Not all collectibles or the exit are reachable.\n", 2);
+				ft_safe_malloc(0, FREE_ALL, 1, NULL);
+			}
+			j++;
+		}
+		i++;
+	}
+	while (i < size.height);
+		ft_safe_malloc(0, FREE_ONE, 1, map_cp[i++]);
+	ft_safe_malloc(0, FREE_ONE, 1, map_cp);
 }
 
 //? Parse the map
@@ -187,6 +217,7 @@ void	parse_map(int ac, char *av[])
 	close(fd);
 	check_map_closed(map, &size);
 	check_valid_chars(map, &count);
+	validate_path(map, size, count);
 	// while (*map)
 	// 	printf("%s\n", *map++);
 	
@@ -207,3 +238,7 @@ void	parse_map(int ac, char *av[])
 * handle player moves . ( you should print the moves if realy the player move )
 * 
 */
+
+//todo : cpy 2D array map ;
+//todo : flood fille should change all E + C + P to 0
+//todo : loop through the map and check if there is any character . if we found it => the map is not valide.

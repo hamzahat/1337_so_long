@@ -6,7 +6,7 @@
 /*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 18:29:17 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/03/29 18:39:14 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/04/03 19:18:32 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@ int main(int ac, char *av[])
 
 //? opne window
 	// open_window(game.mlx_ptr, game.win_ptr);
-	ft_safe_malloc(0,0,0);
+	ft_safe_malloc(0, FREE_ALL, 0, NULL);
 	return 0;
 }

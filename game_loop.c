@@ -6,9 +6,9 @@
 /*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 17:54:46 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/03/28 17:55:05 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/04/03 18:10:06 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //! Runs the game loop and updates events
-#include "../so_long.h"
+#include "so_long.h"
