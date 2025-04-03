@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   map_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hamza_hat <hamza_hat@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 17:47:15 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/03/29 21:02:32 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/03/31 16:40:14 by hamza_hat        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//! Reads & validates the map file (.ber) & Checks map validity (walls, collectibles, exit, player)
+//! so_long parsing
 #include "so_long.h"
 
 //? check that the map is .ber extension
@@ -68,7 +68,7 @@ static void	check_map_rectangular(int fd)
 	}
 }
 
-//? calculate x and y
+//? calculate x and y of the map ( the size )
 static void	calculate_size(t_map *size, int fd)
 {
 	int i = 1;
@@ -88,13 +88,14 @@ static void	calculate_size(t_map *size, int fd)
 	size->y = i;
 }
 
+//? copy the map from file (.ber) to 2D array
 static char	**make_area(int fd, t_map *size)
 {
     char    **map;
     char    *line;
     int     i = 0;
 
-    map = ft_safe_malloc(sizeof(char *) * size->y, 1, 1); // Allocate max possible lines
+    map = ft_safe_malloc(sizeof(char *) * (size->y + 1), 1, 1);
     while ((line = get_next_line(fd)))
     {
         map[i] = ft_safe_malloc(sizeof(char) * (ft_strlen_map_check(line) + 1), 1, 1);
@@ -106,6 +107,7 @@ static char	**make_area(int fd, t_map *size)
     return (map);
 }
 
+//? check if the map is closed by walls (1)
 static void check_map_closed(char **map, t_map *size)
 {
 	int i = 0;
@@ -130,11 +132,12 @@ static void check_map_closed(char **map, t_map *size)
 	}
 }
 
+//? check if there is just (E) (P) (C) (O) (1) chars
 static void	check_valid_chars(char **map, t_game *count)
 {
 	int i = 0;
 	int j = 0;
-	int key = 0;
+	int invalid_char = 0;
 	while (map[i])
 	{
 		j = 0;
@@ -149,12 +152,12 @@ static void	check_valid_chars(char **map, t_game *count)
 			else if (map[i][j] == '0' || map[i][j] == '1')
 				;
 			else
-				key = 1;
+				invalid_char = 1; //* check if there is somthing else 
 			j++;
 		}
 		i++;
 	}
-	if ((count->exit != 1) || (count->player != 1) || (count->coins < 1) || (key == 1))
+	if ((count->exit != 1) || (count->player != 1) || (count->coins < 1) || (invalid_char == 1))
 	{
 		ft_putstr_fd("Error: Map must have exactly 1 exit, 1 player, at least 1 coins\n", 2);
 		ft_safe_malloc(0,0,1);
@@ -171,6 +174,9 @@ void	parse_map(int ac, char *av[])
 
 	if (ac != 2)
 		exit(1);
+	count.coins = 0;
+	count.exit = 0;
+	count.player = 0;
 	Check_map_extension(av[1]);
 	check_map_exists(av[1], &fd);
 	check_map_rectangular(fd);

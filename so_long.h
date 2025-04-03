@@ -2,9 +2,6 @@
 # define SO_LONG_H
 
 #include <mlx.h>
-#include <X11/X.h>
-#include <X11/keysym.h>
-
 # include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -18,16 +15,23 @@
 #  define BUFFER_SIZE 42
 # endif
 
+//? scrine size
 # define WIDTH 800
 # define HEIGHT 600
 
 
 //? Define key codes for Linux
+//! this are wrong ! chang them for Mac
 # define KEY_ESC        65307
 # define KEY_W          119
 # define KEY_A          97
 # define KEY_S          115
 # define KEY_D          100
+
+//? Macros for ft_safe_malloc keys:
+#define ALLOCATE 1
+#define FREE_ALL 0
+#define FREE_ONE 2
 
 //? ft_safe_malloc struct:
 typedef struct s_mem_node
@@ -53,23 +57,23 @@ typedef struct s_game
 // 	int	y;
 // }	t_vars;
 
+//?
 typedef struct s_map
 {
-	int x;
-	int	y;
+	int	width;
+	int	height;
 }	t_map;
-
 
 //? game fun:
 void	parse_map(int ac, char *av[]);
 void	open_window(void *mlx, void *win);
-void	*ft_safe_malloc(size_t size, int key, int exit_status);
+void	*ft_safe_malloc(size_t size, int key, int exit_status, void *to_delete);
 int		close_window(void *mlx, void *win);
 size_t	ft_strlen_map_check(const char *s);
 size_t	ft_strlen(const char *s);
 int		ft_strcmp(char *s1, char *s2);
 void	ft_putstr_fd(char *s, int fd);
-char *ft_strcpy(char *dst, const char *src);
+char	*ft_strcpy(char *dst, const char *src);
 
 
 //? get_next_line fun:

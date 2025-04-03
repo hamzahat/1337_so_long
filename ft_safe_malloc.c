@@ -6,12 +6,14 @@
 /*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 20:39:18 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/03/28 20:46:06 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/04/03 18:01:16 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+//! ft_safe_malloc:
 #include "so_long.h"
 
+//? Zero out a block of memory.
 static void	ft_bzero(void *s, size_t len)
 {
 	unsigned char	*tmp;
@@ -21,6 +23,7 @@ static void	ft_bzero(void *s, size_t len)
 		*tmp++ = 0;
 }
 
+//? Free all allocated memory in the memory tracking list and exit.
 static void	free_list(t_mem_node **list, int exit_status)
 {
 	t_mem_node	*tmp;
@@ -35,6 +38,7 @@ static void	free_list(t_mem_node **list, int exit_status)
 	exit(exit_status);
 }
 
+//? Add a new memory block to the memory tracking list.
 static void	lst_add_back_malloc(t_mem_node **lst, void *value)
 {
 	t_mem_node	*last;
@@ -58,14 +62,41 @@ static void	lst_add_back_malloc(t_mem_node **lst, void *value)
 	last->next = tmp;
 }
 
-//? it allocate and check for failing and free safely
-void	*ft_safe_malloc(size_t size, int key, int exit_status)
+//? Free a specific memory block and update the tracking list
+static void	free_specific_node(t_mem_node **lst, void *to_delete)
+{
+	t_mem_node	*current;
+	t_mem_node	*prev;
+
+	if (!lst || !*lst || !to_delete)
+		return ;
+	current = *lst;
+	prev = NULL;
+	while (current)
+	{
+		if (current->address == to_delete)
+		{
+			free(current->address);
+			if (prev)
+				prev->next = current->next;
+			else
+				*lst = current->next;
+			free(current);
+			return ;
+		}
+		prev = current;
+		current = current->next;
+	}
+}
+
+//? Allocate memory, track it, and handle failures safely.
+void	*ft_safe_malloc(size_t size, int key, int exit_status, void *to_delete)
 {
 	static t_mem_node	*mem_node;
 	void				*ptr;
 
 	ptr = NULL;
-	if (key == 1)
+	if (key == ALLOCATE)
 	{
 		ptr = malloc(size);
 		if (!ptr)
@@ -73,7 +104,9 @@ void	*ft_safe_malloc(size_t size, int key, int exit_status)
 		lst_add_back_malloc(&mem_node, ptr);
 		ft_bzero(ptr, size);
 	}
-	if (key == 0)
+	else if (key == FREE_ALL)
 		free_list(&mem_node, exit_status);
+	else if (key == FREE_ONE)
+		free_specific_node(&mem_node, to_delete);
 	return (ptr);
 }

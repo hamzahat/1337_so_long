@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hamza_hat <hamza_hat@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 18:39:35 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/03/29 21:08:36 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/03/31 12:32:03 by hamza_hat        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,24 +69,24 @@ char *ft_strcpy(char *dst, const char *src)
 }
 //todo: fix this shit
 
-static void	flood_fill_recur(char **tab, t_point size, int x , int y, char target)
-{
-	if (x < 0 || x >= size.x || y < 0 || y >= size.y)
-		return;
-	if (tab[y][x] != target)
-		return;
-	tab[y][x] = 'F';
-	flood_fill_recur(tab, size, x + 1, y, target);
-	flood_fill_recur(tab, size, x - 1, y, target);
-	flood_fill_recur(tab, size, x, y + 1, target);
-	flood_fill_recur(tab, size, x, y - 1, target);
-}
+// static void	flood_fill_recur(char **tab, t_point size, int x , int y, char target)
+// {
+// 	if (x < 0 || x >= size.x || y < 0 || y >= size.y)
+// 		return;
+// 	if (tab[y][x] != target)
+// 		return;
+// 	tab[y][x] = 'F';
+// 	flood_fill_recur(tab, size, x + 1, y, target);
+// 	flood_fill_recur(tab, size, x - 1, y, target);
+// 	flood_fill_recur(tab, size, x, y + 1, target);
+// 	flood_fill_recur(tab, size, x, y - 1, target);
+// }
 
-void	flood_fill(char *tab[], t_point size, t_point begin)
-{
-	char target = tab[begin.x][begin.y];
+// void	flood_fill(char *tab[], t_point size, t_point begin)
+// {
+// 	char target = tab[begin.x][begin.y];
 
-	if (target == 'F') //* if it's already 'F' , no need to fill
-		return;
-	flood_fill_recur(tab, size, begin.x, begin.y, target);
-}
+// 	if (target == 'F') //* if it's already 'F' , no need to fill
+// 		return;
+// 	flood_fill_recur(tab, size, begin.x, begin.y, target);
+// }
