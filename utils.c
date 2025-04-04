@@ -6,7 +6,7 @@
 /*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 18:39:35 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/04/03 22:14:08 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:03:50 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	ft_putstr_fd(char *s, int fd)
 		write(fd, s++, 1);
 }
 
-char *ft_strcpy(char *dst, const char *src)
+char	*ft_strcpy(char *dst, const char *src)
 {
 	int i = 0;
 	while (src[i] && src[i] != '\n')
@@ -67,30 +67,22 @@ char *ft_strcpy(char *dst, const char *src)
 	dst[i] = 0;
 	return (dst);
 }
-//todo: fix this shit
 
-static void	flood_fill_recur(char **tab, t_map size, int x , int y, char target)
+//? Flood fill to check valide path
+void	flood_fill(char **map, int x, int y , t_map size)
 {
-	if (x < 0 || x >= size.width || y < 0 || y >= size.height)
-		return;
-	if (tab[y][x] != target)
-		return;
-	tab[y][x] = 'F';
-	flood_fill_recur(tab, size, x + 1, y, target);
-	flood_fill_recur(tab, size, x - 1, y, target);
-	flood_fill_recur(tab, size, x, y + 1, target);
-	flood_fill_recur(tab, size, x, y - 1, target);
+	if (x < 0 || y < 0 || x >= size.width || y >= size.height)
+   	 return;
+    if (map[y][x] == '1' || map[y][x] == 'F')
+        return;
+    map[y][x] = 'F';
+    flood_fill(map, x + 1, y, size);
+    flood_fill(map, x - 1, y, size);
+    flood_fill(map, x, y + 1, size);
+    flood_fill(map, x, y - 1, size);
 }
 
-void	flood_fill(char *tab[], t_map size, t_game begin)
-{
-	char target = tab[begin.player_x][begin.player_y];
-
-	if (target == '0') //* if it's already 'F' , no need to fill
-		return;
-	flood_fill_recur(tab, size, begin.player_x, begin.player_y, target);
-}
-
+//? Function to copy a 2D array
 char	**copy_map(char *zone[], t_map size)
 {
 	int		x;
@@ -116,7 +108,8 @@ char	**copy_map(char *zone[], t_map size)
 	return (arr);
 }
 
-void	find_player(char **map, t_map size, t_game count)
+//? Find player position
+void	find_player(char **map, t_map size, t_game *count)
 {
 	int	i;
 	int	j;
@@ -124,12 +117,13 @@ void	find_player(char **map, t_map size, t_game count)
 	i = 0;
 	while (i < size.height)
 	{
+		j = 0;
 		while (j < size.width)
 		{
 			if (map[i][j] == 'P')
 			{
-				count.player_x = j;
-				count.player_y = i;
+				count->player_x = j;
+				count->player_y = i;
 				return ;
 			}
 			j++;
@@ -138,3 +132,20 @@ void	find_player(char **map, t_map size, t_game count)
 	}
 }
 
+//! remove this :
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+void	print_tab(char **tab, t_map size)
+{
+	int y = 0, x = 0;
+	while (y < size.height)
+	{
+		x = 0;
+		while (x < size.width)
+			ft_putchar(tab[y][x++]);	
+		ft_putchar('\n');
+		y++;
+	}
+}

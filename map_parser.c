@@ -6,7 +6,7 @@
 /*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 17:47:15 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/04/03 22:05:46 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:11:48 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ static char	**make_area(int fd, t_map *size)
     return (map);
 }
 
-//? check if the map is closed by walls (1)
+//? check if the map is closed by walls ( 1 )
 static void check_map_closed(char **map, t_map *size)
 {
 	int i = 0;
@@ -164,16 +164,21 @@ static void	check_valid_chars(char **map, t_game *count)
 	}
 }
 
-//? //? Validate path
-void	validate_path(char **map, t_map size, t_game count)
+//? check if the player can reach all collectibles and the exit
+void	validate_path(char **map, t_map size, t_game *count)
 {
 	char	**map_cp;
 	int		i;
 	int		j;
+	int		px;
+	int		py;
 
 	map_cp = copy_map(map, size);
 	find_player(map_cp, size, count);
-	flood_fill(map_cp, count);
+	printf("\n");
+	px = count->player_x;
+	py = count->player_y;
+	flood_fill(map_cp, px, py, size);
 	i = 0;
 	while (i < size.height)
 	{
@@ -189,7 +194,7 @@ void	validate_path(char **map, t_map size, t_game count)
 		}
 		i++;
 	}
-	while (i < size.height);
+	while (i < size.height)
 		ft_safe_malloc(0, FREE_ONE, 1, map_cp[i++]);
 	ft_safe_malloc(0, FREE_ONE, 1, map_cp);
 }
@@ -217,14 +222,7 @@ void	parse_map(int ac, char *av[])
 	close(fd);
 	check_map_closed(map, &size);
 	check_valid_chars(map, &count);
-	validate_path(map, size, count);
-	// while (*map)
-	// 	printf("%s\n", *map++);
-	
-	// printf("x = %d\n", size.x);
-	// printf("y = %d\n", size.y);
-	
-	
+	validate_path(map, size, &count);
 }
 
 //? parsing algo:
@@ -232,13 +230,8 @@ void	parse_map(int ac, char *av[])
 *
 * check that the map is surrounded by walls ( 1 ) 									(done)
 * check that the map contain 1 player (P), 1 exit (E), at least 1 collectibel (C) 	(done)
-*
-*
-* check the size of map before open flood fill
-* handle player moves . ( you should print the moves if realy the player move )
+* check the size of map before open flood fill 										(todo)
+* handle player moves . ( you should print the moves if realy the player move )		(todo)
 * 
 */
 
-//todo : cpy 2D array map ;
-//todo : flood fille should change all E + C + P to 0
-//todo : loop through the map and check if there is any character . if we found it => the map is not valide.

@@ -84,7 +84,9 @@ char	*ft_strchr(const char *s, char c);
 char	*ft_strdup(const char *s1);
 char	*ft_substr(const char *s, unsigned int start, size_t len);
 char	*ft_strjoin(const char *s1, const char *s2);
-void	find_player(char **map, t_map size, t_game count);
+void	find_player(char **map, t_map size, t_game *count);
+void	flood_fill(char **map, int x, int y , t_map size);
 
-
+//! remove this : 
+void	print_tab(char **tab, t_map size);
 #endif
