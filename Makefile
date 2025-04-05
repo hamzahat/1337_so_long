@@ -1,8 +1,8 @@
 NAME = so_long
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 MLX = -lmlx -framework OpenGL -framework AppKit
-SRCS = main.c window.c ft_safe_malloc.c exit.c map_parser.c utils.c get_next_line.c get_next_line_utils.c
+SRCS = main.c ft_safe_malloc.c exit.c map_parser.c utils.c get_next_line.c get_next_line_utils.c
 
 OBJS = $(SRCS:.c=.o)
 

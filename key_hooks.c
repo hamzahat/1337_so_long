@@ -6,9 +6,9 @@
 /*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 17:56:38 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/03/28 17:56:54 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/04/04 23:56:57 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //! Handles key presses (movement, exit game)
-#include "../so_long.h"
+#include "so_long.h"
