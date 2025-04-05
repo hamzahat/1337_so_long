@@ -56,6 +56,11 @@ typedef struct s_mem_node
 //? so_long struct:
 typedef struct s_game
 {
+    void    *player_pic;
+    void    *wall_pic;
+    void    *floor_pic;
+    void    *collect_pic;
+    void    *exit_pic;
 	void	*mlx_ptr;
 	void	*win_ptr;
 	char	**map;
@@ -68,7 +73,7 @@ typedef struct s_game
 	int		height;
 } t_game;
 
-//? game fun:
+//? parsing fun:
 void	parse_map(int ac, char *av[], t_game *game);
 void	*ft_safe_malloc(size_t size, int key, int exit_status, void *to_delete);
 int		close_window(t_game *game);
@@ -83,6 +88,11 @@ void	find_player(t_game *game);
 void	flood_fill(char **map, int x, int y , t_game *game);
 void	update_map_info(t_game *map_inf);
 void	is_valid(t_game *game, char **map_cp);
+
+//? game fun:
+int		key_handler(int keycode, t_game *game);
+void	load_images(t_game *game);
+void draw_map(t_game *game);
 
 //? get_next_line fun:
 char	*get_next_line(int fd);

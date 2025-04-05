@@ -6,7 +6,7 @@
 /*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 17:47:15 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/04/05 11:13:14 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/04/05 12:13:11 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	calculate_size(t_game *size, int fd)
 	char	*tmp = get_next_line(fd);
 	if (!tmp)
 	{
-		ft_putstr_fd("Error: Empty map file.\n", 2);
+		ft_putstr_fd("Error\nEmpty map file.\n", 2);
 		close(fd);
 		exit(1);
 	}
@@ -41,7 +41,7 @@ static void	Check_map_extension(char *map_name)
 	len = ft_strlen(map_name);
 	if (len < 4 || ft_strcmp(map_name + len - 4, ".ber") != 0)
 	{
-		ft_putstr_fd("Error: Map file must have a .ber extension\n", 2);
+		ft_putstr_fd("Error\nMap file must have a .ber extension\n", 2);
 		exit(1);
 	}
 }
@@ -60,7 +60,7 @@ static void	make_area(int fd, t_game *game)
         ft_strcpy(map[i], line);
 		if (ft_strlen(map[i]) != (size_t)game->width)
 		{
-			printf("Error: Map is not rectangular.\n");
+			printf("Error\nMap is not rectangular.\n");
 			close(fd);
 			ft_safe_malloc(0, FREE_ALL, 1, NULL);
 		}
@@ -79,7 +79,7 @@ static void	check_map_exists(char *map_file, t_game *game)
 	fd = open(map_file, O_RDONLY);
 	if (fd == -1)
 	{
-		ft_putstr_fd("Error: Map file not found or inaccessible.\n", 2);
+		ft_putstr_fd("Error\nMap file not found or inaccessible.\n", 2);
 		exit(1);
 	}
 	calculate_size(game, fd);
@@ -87,7 +87,7 @@ static void	check_map_exists(char *map_file, t_game *game)
 	fd = open(map_file, O_RDONLY);
 	if (fd == -1)
 	{
-		ft_putstr_fd("Error: Map file not found or inaccessible.\n", 2);
+		ft_putstr_fd("Error\nMap file not found or inaccessible.\n", 2);
 		exit(1);
 	}
 	make_area(fd, game);
@@ -103,7 +103,7 @@ static void check_map_closed(t_game *game)
 	{
 		if ((game->map[0][i] != '1') || (game->map[game->height - 1][i] != '1'))
 		{
-			ft_putstr_fd("Error: Map is not enclosed in walls.\n", 2);
+			ft_putstr_fd("Error\nMap is not enclosed in walls.\n", 2);
 			ft_safe_malloc(0, 0, ALLOCATE, NULL);
 		}
 		i++;
@@ -113,7 +113,7 @@ static void check_map_closed(t_game *game)
 	{
 		if ((game->map[i][0] != '1') || (game->map[i][game->width - 1] != '1'))
 		{
-			ft_putstr_fd("Error: Map is not enclosed in walls.\n", 2);
+			ft_putstr_fd("Error\nMap is not enclosed in walls.\n", 2);
 			ft_safe_malloc(0, 0, ALLOCATE, NULL);
 		}
 		i++;
@@ -145,7 +145,7 @@ static void	check_valid_chars(t_game *game)
 	}
 	if ((game->exit != 1) || (game->player != 1) || (game->coins < 1) || (invalid_char == 1))
 	{
-		ft_putstr_fd("Error: Map must have exactly 1 exit, 1 player, at least 1 coins\n", 2);
+		ft_putstr_fd("Error\nMap must have exactly 1 exit, 1 player, at least 1 coins\n", 2);
 		ft_safe_malloc(0, 0, ALLOCATE, NULL);
 	}
 }

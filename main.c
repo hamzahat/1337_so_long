@@ -6,7 +6,7 @@
 /*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 18:29:17 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/04/05 11:15:11 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/04/05 12:11:46 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int main(int ac, char *av[])
 	game.mlx_ptr = mlx_init();
 	if (!game.mlx_ptr)
 	{
-		ft_putstr_fd("Error: mlx_init failed\n", 2);
+		ft_putstr_fd("Error\nmlx_init failed\n", 2);
 		ft_safe_malloc(0, FREE_ALL, 1, NULL);
 	}
 
@@ -35,9 +35,10 @@ int main(int ac, char *av[])
 	if (!game.win_ptr)
 		ft_safe_malloc(0, FREE_ALL, 1, NULL);
 
+	load_images(&game);
+	draw_map(&game);
 
-
-	// mlx_hook(game.win_ptr, 2, 0, key_handler, game.mlx_ptr);
+	mlx_hook(game.win_ptr, 2, 0, key_handler, &game); // 2 = key press
 	mlx_hook(game.win_ptr, ON_DESTROY, 0, close_window, &game);
 
 
@@ -47,4 +48,3 @@ int main(int ac, char *av[])
 	ft_safe_malloc(0, FREE_ALL, 0, NULL);
 	return 0;
 }
-//Create a Window with MiniLibX

@@ -6,7 +6,7 @@
 /*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 18:39:35 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/04/05 00:01:53 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/04/05 12:20:56 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ void	is_valid(t_game *game, char **map_cp)
 		{
 			if (map_cp[i][j] == 'C' || map_cp[i][j] == 'E')
 			{
-				ft_putstr_fd("Error: Not all collectibles or the exit are reachable.\n", 2);
+				ft_putstr_fd("Error\nNot all collectibles or the exit are reachable.\n", 2);
 				ft_safe_malloc(0, FREE_ALL, 1, NULL);
 			}
 			j++;
@@ -210,6 +210,63 @@ void	is_valid(t_game *game, char **map_cp)
 		i++;
 	}
 }
+
+// todo
+int key_handler(int keycode, t_game *game)
+{
+    if (keycode == KEY_ESC)
+		close_window(game);
+    // if (keycode == KEY_W)
+		
+
+    return 0;
+}
+
+
+void load_images(t_game *game)
+{
+    int width;
+    int height;
+
+    game->wall_pic = mlx_xpm_file_to_image(game->mlx_ptr, "textures/wall.xpm", &width, &height);
+    game->floor_pic = mlx_xpm_file_to_image(game->mlx_ptr, "textures/floor.xpm", &width, &height);
+    game->player_pic = mlx_xpm_file_to_image(game->mlx_ptr, "textures/player.xpm", &width, &height);
+    game->collect_pic = mlx_xpm_file_to_image(game->mlx_ptr, "textures/collect.xpm", &width, &height);
+    game->exit_pic = mlx_xpm_file_to_image(game->mlx_ptr, "textures/exit.xpm", &width, &height);
+}
+
+void draw_map(t_game *game)
+{
+    int		x;
+	int		y;
+	char	tile;
+	void	*img;
+
+    y = 0;
+    while (y < game->height)
+    {
+        x = 0;
+        while (x < game->width)
+        {
+			mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, game->floor_pic, x * SIZE, y * SIZE);
+            tile = game->map[y][x];
+            img = NULL;
+            if (tile == '1')
+                img = game->wall_pic;
+            else if (tile == 'P')
+                img = game->player_pic;
+            else if (tile == 'C')
+                img = game->collect_pic;
+            else if (tile == 'E')
+                img = game->exit_pic;
+            if (img)
+                mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, img, x * SIZE, y * SIZE);
+            x++;
+        }
+        y++;
+    }
+}
+
 
 //! remove this : ( print tab )
 void	ft_putchar(char c)
