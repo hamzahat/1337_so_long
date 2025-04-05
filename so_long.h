@@ -71,6 +71,7 @@ typedef struct s_game
 	int		player_y;
 	int		width;
 	int		height;
+	int		moves;
 } t_game;
 
 //? parsing fun:
@@ -92,7 +93,13 @@ void	is_valid(t_game *game, char **map_cp);
 //? game fun:
 int		key_handler(int keycode, t_game *game);
 void	load_images(t_game *game);
-void draw_map(t_game *game);
+void	draw_map(t_game *game);
+void	player_up(t_game *game);
+void	player_down(t_game *game);
+void	player_left(t_game *game);
+void	player_right(t_game *game);
+void	ft_putnbr(int nb);
+void	ft_putchar(char c);
 
 //? get_next_line fun:
 char	*get_next_line(int fd);
@@ -103,5 +110,5 @@ char	*ft_strjoin(const char *s1, const char *s2);
 
 //! remove this : 
 void	print_tab(t_game *game);
-void	print_struct(t_game *game);
+
 #endif
