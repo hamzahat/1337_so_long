@@ -31,7 +31,15 @@
 # define KEY_right  124  // Right arrow
 # define KEY_left   123  // Left arrow
 
-# define KEY_ESC   53  // Escape key
+# define KEY_ESC	53  // Escape key
+
+#define ON_DESTROY 17
+
+//? size of pixels
+# define SIZE		64
+
+//? title of window:
+#define TITLE "so_long"
 
 //? Macros for ft_safe_malloc keys:
 #define ALLOCATE 1
@@ -62,9 +70,8 @@ typedef struct s_game
 
 //? game fun:
 void	parse_map(int ac, char *av[], t_game *game);
-void	open_window(void *mlx, void *win);
 void	*ft_safe_malloc(size_t size, int key, int exit_status, void *to_delete);
-int		close_window(void *mlx, void *win);
+int		close_window(t_game *game);
 size_t	ft_strlen_map_check(const char *s);
 size_t	ft_strlen(const char *s);
 int		ft_strcmp(char *s1, char *s2);
