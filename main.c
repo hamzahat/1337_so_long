@@ -6,7 +6,7 @@
 /*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 18:29:17 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/04/05 13:09:35 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/04/05 17:15:56 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int main(int ac, char *av[])
 	load_images(&game);
 	draw_map(&game);
 
-	mlx_hook(game.win_ptr, 2, 0, key_handler, &game); // 2 = key press
+	mlx_hook(game.win_ptr, 2, 0, key_handler, &game);
 	mlx_hook(game.win_ptr, ON_DESTROY, 0, close_window, &game);
 
 

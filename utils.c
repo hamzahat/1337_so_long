@@ -6,7 +6,7 @@
 /*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 18:39:35 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/04/05 15:15:47 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/04/05 16:48:07 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,29 @@ void	find_player(t_game *game)
 	}
 }
 
+void	find_exit(t_game *game)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < game->height)
+	{
+		j = 0;
+		while (j < game->width)
+		{
+			if (game->map[i][j] == 'E')
+			{
+				game->exit_x = j;
+				game->exit_y = i;
+				return ;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
 //? initialize all the game struct to 0
 void	game_init(t_game *game)
 {
@@ -158,6 +181,7 @@ void	update_map_info(t_game *map_inf)
 	map_inf->exit = 0;
 	map_inf->player = 0;
 	find_player(map_inf);
+	find_exit(map_inf);
 	while (i < map_inf->height)
 	{
 		j = 0;

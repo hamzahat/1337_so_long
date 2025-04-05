@@ -69,6 +69,8 @@ typedef struct s_game
 	int		player;
 	int		player_x;
 	int		player_y;
+	int		exit_x;
+	int		exit_y;
 	int		width;
 	int		height;
 	int		moves;
@@ -100,6 +102,7 @@ void	player_left(t_game *game);
 void	player_right(t_game *game);
 void	ft_putnbr(int nb);
 void	ft_putchar(char c);
+void	find_exit(t_game *game);
 
 //? get_next_line fun:
 char	*get_next_line(int fd);
