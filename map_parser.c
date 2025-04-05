@@ -6,7 +6,7 @@
 /*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 17:47:15 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/04/05 12:13:11 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/04/05 18:15:40 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 static void	calculate_size(t_game *size, int fd)
 {
 	int i = 1;
+
 	char	*tmp = get_next_line(fd);
 	if (!tmp)
 	{
@@ -32,6 +33,12 @@ static void	calculate_size(t_game *size, int fd)
 		free(tmp);
 	}
 	size->height = i;
+	if ((size->width * SIZE > WIDTH / 2) || (size->height * SIZE > HEIGHT / 2))
+	{
+		ft_putstr_fd("Error\nMap too large to fit the window. Try a smaller map.\n", 2);
+		close(fd);
+		exit(1);
+	}
 }
 //? check that the map is .ber extension
 static void	Check_map_extension(char *map_name)

@@ -16,8 +16,8 @@
 # endif
 
 //? scrine size
-# define WIDTH 800
-# define HEIGHT 600
+# define WIDTH 5120
+# define HEIGHT 2880
 
 
 //? Define key codes for Linux
