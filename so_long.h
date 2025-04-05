@@ -20,7 +20,7 @@
 # define HEIGHT 2880
 
 
-//? Define key codes for Linux
+//? Define key codes for Mac
 # define KEY_W   13  // 'W' key
 # define KEY_A   0   // 'A' key
 # define KEY_S   1   // 'S' key
