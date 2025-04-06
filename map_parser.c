@@ -6,148 +6,128 @@
 /*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 17:47:15 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/04/06 20:23:05 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/04/07 00:10:35 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //! so_long parsing
 #include "so_long.h"
 
-//? calculate width + height of map
+//? Calculate map dimensions (width/height) from file
 static void	calculate_size(t_game *size, int fd)
 {
-	int i = 1;
+	int		i;          //* Line counter for height
+	char	*tmp;       //* Buffer for each line read
 
-	char	*tmp = get_next_line(fd);
-	if (!tmp)
+	i = 1;
+	tmp = get_next_line(fd);
+	if (!tmp)           //* Handle empty file
 	{
 		ft_putstr_fd("Error\nEmpty map file.\n", 2);
 		close(fd);
 		exit(1);
 	}
-	size->width = ft_strlen_map_check(tmp);
+	size->width = ft_strlen_map_check(tmp);  //* Set width from first line
 	free(tmp);
-	while ((tmp = get_next_line(fd)))
+    //* Count remaining lines for height
+	tmp = get_next_line(fd);
+	while (tmp)
 	{
 		i++;
 		free(tmp);
+		tmp = get_next_line(fd);
 	}
 	size->height = i;
-	if (((size->width * SIZE) > (WIDTH / 2)) || ((size->height * SIZE) > (HEIGHT / 2)))
-	{
-		ft_putstr_fd("Error\nMap too large to fit the window. Try a smaller map.\n", 2);
-		close(fd);
-		exit(1);
-	}
+	check_map_fits_screen(size, fd);  //* Verify map fits game window
 }
 
-//? copy the map from file (.ber) to 2D array & check if the map is rectangular
-static void	make_area(int fd, t_game *game)
+//? check if the map file exist & open the fd & calculate width 
+//? + height & copy mape frome fd to 2D array
+void	check_map_exists(char *map_file, t_game *game)
 {
-    char    **map;
-    char    *line;
-    int     i = 0;
+	int	fd;  //* File descriptor
 
-    map = ft_safe_malloc(sizeof(char *) * (game->height + 1), ALLOCATE, 1, NULL);
-    while ((line = get_next_line(fd)))
-    {
-        map[i] = ft_safe_malloc(sizeof(char) * (ft_strlen_map_check(line) + 1), ALLOCATE, 1,NULL);
-        ft_strcpy(map[i], line);
-		if (ft_strlen(map[i]) != (size_t)game->width)
-		{
-			printf("Error\nMap is not rectangular.\n");
-			close(fd);
-			ft_safe_malloc(0, FREE_ALL, 1, NULL);
-		}
-        free(line);
-        i++;
-    }
-    map[i] = NULL;
-    game->map = map;
-}
-
-//? check if the map file exist & open the fd & calculate width + height & copy mape frome fd to 2D array
-static void	check_map_exists(char *map_file, t_game *game)
-{
-	int	fd;
-
+    //* First open: read dimensions
 	fd = open(map_file, O_RDONLY);
-	if (fd == -1)
+	if (fd == -1)       //* Verify file access
 	{
 		ft_putstr_fd("Error\nMap file not found or inaccessible.\n", 2);
 		exit(1);
 	}
 	calculate_size(game, fd);
 	close(fd);
+
+    // Second open: copy map data
 	fd = open(map_file, O_RDONLY);
-	if (fd == -1)
+	if (fd == -1)       // Re-check accessibility
 	{
 		ft_putstr_fd("Error\nMap file not found or inaccessible.\n", 2);
 		exit(1);
 	}
-	make_area(fd, game);
-	close(fd);
+	make_area(fd, game);  // Create 2D map array
+	close(fd);			// close the fd
 }
 
 //? check if there is just (E) (P) (C) (O) (1) chars
 static void	check_valid_chars(t_game *game)
 {
-	int invalid_char;
-	int	i;
+	int	invalid_char;  //* Flag for illegal chars
+	int	i;         //* Map coordinates
 	int	j;
 
 	invalid_char = 0;
 	i = 0;
-	j = 0;
-	update_map_info(game);
+	update_map_info(game);	//* Update player/exit/coin counts ( count how many C and E and P in the map to check theme later in check_elements fun )
+    //* Scan entire map
 	while (game->map[i])
 	{
 		j = 0;
 		while (game->map[i][j])
 		{
-			if (game->map[i][j] != 'C' && game->map[i][j] != 'E' \
-				&& game->map[i][j] != 'P' && game->map[i][j] != '0' && game->map[i][j] != '1')
-				invalid_char = 1; // check if there is somthing else 
+            //* Check for invalid characters
+			if (game->map[i][j] != 'C' && game->map[i][j] != 'E' && game->map[i][j] != 'P' && game->map[i][j] != '0' && game->map[i][j] != '1')
+				invalid_char = 1;
 			j++;
 		}
 		i++;
 	}
-	if ((game->exit != 1) || (game->player != 1) || (game->coins < 1) || (invalid_char == 1))
-	{
-		ft_putstr_fd("Error\nMap must have exactly 1 exit, 1 player, at least 1 coins\n", 2);
-		ft_safe_malloc(0, 0, ALLOCATE, NULL);
-	}
+	check_elements(game, invalid_char);  // Validate element counts
 }
 
 //? check if the player can reach all collectibles and the exit
 void	validate_path(t_game *game)
 {
-	char	**map_cp;
-	int		i;
-	int		px;
+	char	**map_cp;  // Map copy for flood-fill
+	int		i;		// indix
+	int		px;     // Player coordinates
 	int		py;
 
 	i = 0;
-	map_cp = copy_map(game);
-	find_player(game);
+	map_cp = copy_map(game);      // Create editable map copy
+	find_player(game);            // Locate player start position
 	px = game->player_x;
 	py = game->player_y;
-	flood_fill(map_cp, px, py, game);
-	is_valid(game, map_cp);
+	flood_fill(map_cp, px, py, game);  // Mark accessible areas
+    
+	// Free map copy
+	is_valid(game, map_cp);       // Check remaining unreachable elements
 	while (i < game->height)
 		ft_safe_malloc(0, FREE_ONE, 1, map_cp[i++]);
 	ft_safe_malloc(0, FREE_ONE, 1, map_cp);
 }
 
-//? Parse the map
+//? Map parsing function
 void	parse_map(int ac, char *av[], t_game *game)
 {
-	if (ac != 2)
+	if (ac != 2)        // Verify argument count
 		exit(1);
-	game_init(game);
-	Check_map_extension(av[1]);
-	check_map_exists(av[1], game);
-	check_map_closed(game);
-	check_valid_chars(game);
-	validate_path(game);
+	game_init(game);    // Initialize game struct
+
+
+    // Execute validation pipeline
+	check_map_extension(av[1]);    // .ber extension
+	check_map_exists(av[1], game); // File processing
+	check_map_closed(game);        // Wall enclosure
+	check_valid_chars(game);       // Character validation
+	validate_path(game);           // Path accessibility
 }
