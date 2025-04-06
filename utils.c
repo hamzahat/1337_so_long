@@ -6,7 +6,7 @@
 /*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 18:39:35 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/04/06 19:53:28 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/04/06 20:26:41 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,68 +66,6 @@ char	*ft_strcpy(char *dst, const char *src)
 	}
 	dst[i] = 0;
 	return (dst);
-}
-
-//? Flood fill to check valide path
-void	flood_fill(char **map, int x, int y , t_game *game)
-{
-	if (x < 0 || y < 0 || x >= game->width || y >= game->height)
-   	 return;
-    if (map[y][x] == '1' || map[y][x] == 'F')
-        return;
-    map[y][x] = 'F';
-    flood_fill(map, x + 1, y, game);
-    flood_fill(map, x - 1, y, game);
-    flood_fill(map, x, y + 1, game);
-    flood_fill(map, x, y - 1, game);
-}
-
-//? Function to copy a 2D array
-char	**copy_map(t_game *game)
-{
-	int		x;
-	int		y;
-	char	**arr;
-
-	x = 0;
-	y = 0;
-	arr = ft_safe_malloc(sizeof(char *) * (game->height + 1), ALLOCATE, 1, NULL);
-	while (y < game->height)
-	{
-		x = 0;
-		arr[y] = ft_safe_malloc(sizeof(char) * (game->width + 1), ALLOCATE, 1, NULL);
-		while (x < game->width)
-		{
-			arr[y][x] = game->map[y][x];
-			x++;
-		}
-		arr[y][x] = 0;
-		y++;
-	}
-	arr[y] = NULL;
-	return (arr);
-}
-
-void	is_valid(t_game *game, char **map_cp)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < game->height)
-	{
-		j = 0;
-		while (j < game->width)
-		{
-			if (map_cp[i][j] == 'C' || map_cp[i][j] == 'E')
-			{
-				ft_putstr_fd("Error\nNot all collectibles or the exit are reachable.\n", 2);
-				ft_safe_malloc(0, FREE_ALL, 1, NULL);
-			}
-			j++;
-		}
-		i++;
-	}
 }
 
 void	ft_putnbr(int nb)

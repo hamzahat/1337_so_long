@@ -6,7 +6,7 @@
 /*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 17:47:15 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/04/06 19:43:04 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/04/06 20:23:05 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,6 @@ static void	calculate_size(t_game *size, int fd)
 	{
 		ft_putstr_fd("Error\nMap too large to fit the window. Try a smaller map.\n", 2);
 		close(fd);
-		exit(1);
-	}
-}
-//? check that the map is .ber extension
-static void	Check_map_extension(char *map_name)
-{
-	size_t	len;
-
-	len = ft_strlen(map_name);
-	if (len < 4 || ft_strcmp(map_name + len - 4, ".ber") != 0)
-	{
-		ft_putstr_fd("Error\nMap file must have a .ber extension\n", 2);
 		exit(1);
 	}
 }
@@ -99,32 +87,6 @@ static void	check_map_exists(char *map_file, t_game *game)
 	}
 	make_area(fd, game);
 	close(fd);
-}
-
-
-//? check if the map is closed by walls ( 1 )
-static void check_map_closed(t_game *game)
-{
-	int i = 0;
-	while (i < game->width)
-	{
-		if ((game->map[0][i] != '1') || (game->map[game->height - 1][i] != '1'))
-		{
-			ft_putstr_fd("Error\nMap is not enclosed in walls.\n", 2);
-			ft_safe_malloc(0, 0, ALLOCATE, NULL);
-		}
-		i++;
-	}
-	i = 0;
-	while (i < game->height)
-	{
-		if ((game->map[i][0] != '1') || (game->map[i][game->width - 1] != '1'))
-		{
-			ft_putstr_fd("Error\nMap is not enclosed in walls.\n", 2);
-			ft_safe_malloc(0, 0, ALLOCATE, NULL);
-		}
-		i++;
-	}
 }
 
 //? check if there is just (E) (P) (C) (O) (1) chars
