@@ -50,7 +50,7 @@ Invalid maps will show an error and quit ❌
 ## 📸 Demo 
 > Here's a preview of the game:
 
-![so_long demo](Screen%20Shot%202025-04-07%20at%2012.39.16%20AM.png)
+![so_long demo](so_long_pic.png)
 
 ---
 
