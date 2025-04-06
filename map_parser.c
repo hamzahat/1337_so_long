@@ -6,7 +6,7 @@
 /*   By: hbenmoha <hbenmoha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 17:47:15 by hbenmoha          #+#    #+#             */
-/*   Updated: 2025/04/05 19:17:43 by hbenmoha         ###   ########.fr       */
+/*   Updated: 2025/04/06 19:43:04 by hbenmoha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,14 +189,3 @@ void	parse_map(int ac, char *av[], t_game *game)
 	check_valid_chars(game);
 	validate_path(game);
 }
-
-//? parsing algo:
-/*
-*
-* check that the map is surrounded by walls ( 1 ) 									(done)
-* check that the map contain 1 player (P), 1 exit (E), at least 1 collectibel (C) 	(done)
-* check the size of map before open flood fill 										// todo
-* handle player moves . ( you should print the moves if realy the player move )		// todo
-* limit the size of the window to be inside the mac scrine 							// todo
-*/
-
