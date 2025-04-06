@@ -2,7 +2,8 @@ NAME = so_long
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 MLX = -lmlx -framework OpenGL -framework AppKit
-SRCS = main.c ft_safe_malloc.c exit.c map_parser.c utils.c get_next_line.c get_next_line_utils.c key_hooks.c images.c player.c
+SRCS = main.c ft_safe_malloc.c exit.c map_parser.c utils.c get_next_line.c get_next_line_utils.c \
+	key_hooks.c images.c player.c helper_fun_game.c
 
 OBJS = $(SRCS:.c=.o)
 
